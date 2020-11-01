@@ -7,8 +7,22 @@ node_js:
   - "12"
   - "10"
 
+services:
+  - docker
+
 jobs:
   include:
+    - stage: e2e test
+      node_js: lts/*
+      before_install: 
+        - npm install -g yo
+        - npm ci
+        - npm link
+      install: 
+        - yo exist
+        
+      before_script: 
+
     # Define the release stage that runs semantic-release
     - stage: release
       node_js: lts/*

@@ -1,0 +1,16 @@
+{
+  "@existdb/generator-exist": {
+    "promptValues": {
+      "mysec": false,
+      "author": "Duncan Paterson",
+      "email": "d.paterson@me.com",
+      "website": "https://www.duncdrum.eu",
+      "github": false,
+      "docker": true,
+      "atom": true,
+      "instance": "http://localhost:8080/exist",
+      "admin": "admin",
+      "adminpw": ""
+    }
+  }
+}

@@ -63,6 +63,10 @@ describe('empty package', function () {
     return require('../util/meta-test').metaTest()
   })
 
+  describe('end-to-end test', function () {
+    return require('../util/e2e').first_install()
+  })
+
   after('teardown', function (done) {
     fs.emptyDirSync(process.cwd())
     done()
