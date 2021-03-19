@@ -776,19 +776,17 @@ module.exports = class extends Generator {
 
     // Write the constructed pkgJson
     this.fs.writeJSON(this.destinationPath('package.json'), pkgJson)
-  }
-
-  install () {
     this.npmInstall()
   }
 
+
   end () {
     if (this.props.github) {
-      this.spawnCommandSync('git', ['init'])
-      this.spawnCommandSync('git', ['add', '--all'])
-      this.spawnCommandSync('git', ['commit', '-q', '-m', '\'chore(init): scaffolding by Yeoman\''])
+      this.execa('git', ['init'])
+      this.execa('git', ['add', '--all'])
+      this.execa('git', ['commit', '-q', '-m', '\'chore(init): scaffolding by Yeoman\''])
     }
-    this.spawnCommandSync('ant', '-q')
+    this.execa('ant', '-q')
 
     console.log(yosay('I believe we\'re done here.'))
   }
