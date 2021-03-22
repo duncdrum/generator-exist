@@ -348,13 +348,13 @@ module.exports = class extends Generator {
 
   writing () {
     // try to clean invalid xml from streams
-    this.registerTransformStream(
+    this.queueTransformStream(
       stripBom({
         ext: ['xml', 'odd', 'xconf'],
         showLog: false
       }))
     // minify xml first …
-    this.registerTransformStream(prettyData({
+    this.queueTransformStream(prettyData({
       type: 'minify',
       preserveComments: true,
       extensions: {
@@ -363,7 +363,7 @@ module.exports = class extends Generator {
       }
     }))
     // … then pretty print xml
-    this.registerTransformStream(prettyData({
+    this.queueTransformStream(prettyData({
       type: 'prettify',
       extensions: {
         xconf: 'xml',
@@ -371,7 +371,7 @@ module.exports = class extends Generator {
       }
     }))
     // global pkgJson
-    const pkgJson = {
+    this.packageJson({
       name: this.props.title.toLowerCase(),
       version: this.props.version,
       description: this.props.desc,
@@ -387,8 +387,8 @@ module.exports = class extends Generator {
         test: 'mocha test/mocha/ --recursive --exit && mocha test/xqs/*.js'
       },
       repository: ''
-    }
-    this.npmInstall(['chai', 'chai-xml', 'fs-extra', 'mocha', 'supertest', 'xmldoc', 'yeoman-assert'], { 'save-dev': true })
+    })
+    this.addDevDependencies(['chai', 'chai-xml', 'fs-extra', 'mocha', 'supertest', 'xmldoc', 'yeoman-assert'])
     // Applies to all (without prompts)
     // TODO #56 html -> xhtml
 
@@ -519,7 +519,7 @@ module.exports = class extends Generator {
           mysec: this.props.mysec
         })
 
-      this.npmInstall(['cypress'], { 'save-dev': true })
+      this.addDevDependencies(['cypress'])
 
       Object.assign(pkgJson.scripts, {
         cypress: 'cypress run'
@@ -775,10 +775,14 @@ module.exports = class extends Generator {
     }
 
     // Write the constructed pkgJson
-    this.fs.writeJSON(this.destinationPath('package.json'), pkgJson)
-    this.npmInstall()
+    // this.fs.writeJSON(this.destinationPath('package.json'), pkgJson)
+    this.packageJson()
+    
   }
 
+  // install() {
+  //   this.npmInstall()
+  // }
 
   end () {
     if (this.props.github) {
@@ -791,3 +795,4 @@ module.exports = class extends Generator {
     console.log(yosay('I believe we\'re done here.'))
   }
 }
+// module.exports = ExistGenerator
